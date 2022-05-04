@@ -1,0 +1,3 @@
+[submodule "PX4-GPSDrivers"]
+	path = PX4-GPSDrivers
+	url = https://github.com/PX4/PX4-GPSDrivers.git
