@@ -16,8 +16,8 @@ cmake --build build
 
 ## Run
 
-Connect GPS over serial, find the serial device and run the example against it:
+Connect GPS over serial, find the serial device, as well as baudrate, and run the example against it:
 
 ```
-build/rtk-sender-example /dev/ttyUSB0
+build/rtk-sender-example /dev/ttyUSB0 38400
 ```
