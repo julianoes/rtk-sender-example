@@ -9,7 +9,13 @@ find_package(MAVSDK REQUIRED)
 
 add_executable(rtk-sender-example
     rtk-sender-example.cpp
+    definitions.h
     PX4-GPSDrivers/src/gps_helper.h
+    PX4-GPSDrivers/src/gps_helper.cpp
+    PX4-GPSDrivers/src/ubx.h
+    PX4-GPSDrivers/src/ubx.cpp
+    PX4-GPSDrivers/src/rtcm.h
+    PX4-GPSDrivers/src/rtcm.cpp
 )
 
 target_compile_options(rtk-sender-example
