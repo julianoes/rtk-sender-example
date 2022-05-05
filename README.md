@@ -16,8 +16,13 @@ cmake --build build
 
 ## Run
 
-Connect GPS over serial, find the serial device, as well as baudrate, and run the example against it:
+Connect GPS over serial, find the serial device, as well as baudrate.
+Also find the MAVSDK connection URL to connect to the vehicle using MAVLink.
 
 ```
-build/rtk-sender-example /dev/ttyUSB0 38400
+usage: build/rtk-sender-example <serial device> <baudrate> <mavlink connection>
+
+e.g.: build/rtk-sender-example /dev/ttyUSB0 38400 udp://:14550
+
 ```
+Note: use baudrate 0 to determine baudrate automatically

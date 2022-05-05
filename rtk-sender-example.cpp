@@ -9,10 +9,10 @@
 
 int main(int argc, char* argv[])
 {
-    if (argc != 3) {
+    if (argc != 4) {
         printf("\n");
-        printf("usage: %s <serial device> <baudrate>\n", argv[0]);
-        printf("e.g.: %s /dev/ttyUSB0 38400\n", argv[0]);
+        printf("usage: %s <serial device> <baudrate> <mavlink connection>\n", argv[0]);
+        printf("e.g.: %s /dev/ttyUSB0 38400 udp://:14550\n", argv[0]);
         printf("Note: use baudrate 0 to determine baudrate automatically\n");
         return 1;
     }
@@ -24,8 +24,14 @@ int main(int argc, char* argv[])
         return 2;
     }
 
+    mavsdk::Mavsdk mavsdk;
+    auto connection_result = mavsdk.add_any_connection(argv[3]);
+    if (connection_result != mavsdk::ConnectionResult::Success) {
+        printf("Mavsdk connection failed\n");
+        return 3;
+    }
 
-    DriverInterface driver_interface(serial_comms);
+    DriverInterface driver_interface(serial_comms, mavsdk);
 
     auto driver = std::make_unique<GPSDriverUBX>(
             GPSDriverUBX::Interface::UART,
@@ -33,13 +39,14 @@ int main(int argc, char* argv[])
             &driver_interface.gps_pos, &driver_interface.sat_info);
 
     GPSHelper::GPSConfig gps_config {};
-    gps_config.output_mode = GPSHelper::OutputMode::GPS; // for now
-    //gps_config.output_mode = GPSHelper::OutputMode::RTCM; // eventually
+    // to test if RTCM is not available
+    //gps_config.output_mode = GPSHelper::OutputMode::GPS;
+    gps_config.output_mode = GPSHelper::OutputMode::RTCM;
     gps_config.gnss_systems = GPSHelper::GNSSSystemsMask::RECEIVER_DEFAULTS;
 
     if (driver->configure(baudrate, gps_config) != 0) {
         printf("configure failed\n");
-        return 3;
+        return 4;
     }
 
     printf("configure done!\n");
@@ -54,5 +61,5 @@ int main(int argc, char* argv[])
     }
     printf("timed out\n");
 
-    return 4;
+    return 0;
 }
