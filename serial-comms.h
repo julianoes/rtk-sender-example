@@ -9,8 +9,11 @@ public:
     SerialComms() = default;
     ~SerialComms();
 
-    bool init(std::string path, unsigned baudrate);
-    bool read();
+    bool init(std::string path);
+    bool set_baudrate(unsigned baudrate);
+
+    ssize_t read(uint8_t* bytes, unsigned bytes_len);
+    ssize_t write(const uint8_t* bytes, unsigned bytes_len);
     void reset();
 
     const std::vector<uint8_t>& buffer() const { return buffer_; }

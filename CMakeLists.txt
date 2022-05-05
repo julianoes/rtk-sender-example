@@ -12,6 +12,8 @@ add_executable(rtk-sender-example
     serial-comms.h
     serial-comms.cpp
     definitions.h
+    driver-interface.h
+    driver-interface.cpp
     PX4-GPSDrivers/src/gps_helper.h
     PX4-GPSDrivers/src/gps_helper.cpp
     PX4-GPSDrivers/src/ubx.h

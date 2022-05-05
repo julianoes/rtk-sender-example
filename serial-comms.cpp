@@ -11,7 +11,7 @@ SerialComms::~SerialComms()
     reset();
 }
 
-bool SerialComms::init(std::string path, unsigned baudrate) 
+bool SerialComms::init(std::string path) 
 {
     // open() sometimes hangs on macOS or Linux devices unless you give it O_NONBLOCK.
     fd_ = open(path.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
@@ -24,6 +24,13 @@ bool SerialComms::init(std::string path, unsigned baudrate)
         printf("open failed: %s\n", strerror(errno));
         return false;
     }
+
+    return true;
+}
+
+bool SerialComms::set_baudrate(unsigned baudrate)
+{
+    const int baudrate_define = define_from_baudrate(baudrate);
 
     struct termios tc {};
 
@@ -39,12 +46,10 @@ bool SerialComms::init(std::string path, unsigned baudrate)
     tc.c_cflag &= ~(CSIZE | PARENB | CRTSCTS);
     tc.c_cflag |= CS8;
 
-    tc.c_cc[VMIN] = 0; // We are ok with 0 bytes.
+    tc.c_cc[VMIN] = 0; // Let's wait for 10 bytes.
     tc.c_cc[VTIME] = 10; // Timeout after 1 second.
 
     tc.c_cflag |= CLOCAL; // Without this a write() blocks indefinitely.
-
-    const int baudrate_define = define_from_baudrate(baudrate);
 
     if (cfsetispeed(&tc, baudrate_define) != 0) {
         printf("cfsetispeed failed: %s\n", strerror(errno));
@@ -64,22 +69,31 @@ bool SerialComms::init(std::string path, unsigned baudrate)
         return false;
     }
 
+    printf("set baudrate to %u\n", baudrate);
+
     return true;
 }
 
-bool SerialComms::read()
+ssize_t SerialComms::read(uint8_t* bytes, unsigned bytes_len)
 {
-    buffer_.reserve(len);
-
-    auto result = ::read(fd_, buffer_.data(), len);
-
-    if (result > 0) {
-        buffer_.resize(result);
-        return true;
+    ssize_t result = ::read(fd_, bytes, bytes_len);
+    if (result >= 0) {
+        printf("read %zi bytes\n", result);
     } else {
-        buffer_.resize(0);
-        return false;
+        printf("read failed: %s\n", strerror(errno));
     }
+    return result;
+}
+
+ssize_t SerialComms::write(const uint8_t* bytes, unsigned bytes_len)
+{
+    ssize_t result = ::write(fd_, bytes, bytes_len);
+    if (result >= 0) {
+        printf("wrote %zi bytes\n", result);
+    } else {
+        printf("write failed: %s\n", strerror(errno));
+    }
+    return result;
 }
 
 void SerialComms::reset()
