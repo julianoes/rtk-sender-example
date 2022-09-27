@@ -7,6 +7,7 @@
 #include <memory>
 #include <mavsdk/mavsdk.h>
 #include <mavsdk/plugins/rtk/rtk.h>
+#include <mavsdk/plugins/telemetry/telemetry.h>
 
 class DriverInterface {
 public:
@@ -27,4 +28,5 @@ private:
     SerialComms& serial_comms_;
     mavsdk::Mavsdk& mavsdk_;
     std::shared_ptr<mavsdk::Rtk> rtk_plugin_{};
+    std::shared_ptr<mavsdk::Telemetry> telemetry_plugin_{};
 };
