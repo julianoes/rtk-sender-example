@@ -44,6 +44,11 @@ int main(int argc, char* argv[])
             &DriverInterface::callback_entry, &driver_interface,
             &driver_interface.gps_pos, &driver_interface.sat_info);
 
+    constexpr auto survey_minimum_m = 5;
+    constexpr auto survey_duration_s = 20;
+    driver->setSurveyInSpecs(survey_minimum_m * 10000, survey_duration_s);
+
+
     GPSHelper::GPSConfig gps_config {};
     // to test if RTCM is not available
     //gps_config.output_mode = GPSHelper::OutputMode::GPS;
