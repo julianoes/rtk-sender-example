@@ -25,6 +25,12 @@ int main(int argc, char* argv[])
     }
 
     mavsdk::Mavsdk mavsdk;
+
+    // Required when connecting to a flight controller directly via USB.
+    mavsdk::Mavsdk::Configuration config{mavsdk::Mavsdk::Configuration::UsageType::GroundStation};
+    config.set_always_send_heartbeats(true);
+    mavsdk.set_configuration(config);
+
     auto connection_result = mavsdk.add_any_connection(argv[3]);
     if (connection_result != mavsdk::ConnectionResult::Success) {
         printf("Mavsdk connection failed\n");
