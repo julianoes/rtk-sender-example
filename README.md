@@ -5,9 +5,9 @@ Example that connects to a GPS and sends RTCM RTK data via MAVLink using MAVSDK.
 
 1. Install [MAVSDK](https://github.com/mavlink/MAVSDK) on your system.
 2. Install `cmake` and a compiler such as `GCC`.
-3. Then cloning the rtk-sender-example
-4. Then go inside the rtk-sender-example directory. 
-5. Get the git submodule: `git submodule update --init --recursive`.
+3. Then clone the rtk-sender-example: `git clone https://github.com/julianoes/rtk-sender-example.git`
+4. Then go inside the rtk-sender-example directory: `cd rtk-sender-example`
+5. Get the git submodule: `git submodule update --init --recursive`
 
 ## Build
 
