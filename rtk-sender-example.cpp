@@ -5,6 +5,7 @@
 #include "PX4-GPSDrivers/src/ubx.h"
 #include "serial-comms.h"
 #include "driver-interface.h"
+#include <mavsdk/mavsdk.h>
 
 
 int main(int argc, char* argv[])
@@ -24,12 +25,10 @@ int main(int argc, char* argv[])
         return 2;
     }
 
-    mavsdk::Mavsdk mavsdk;
-
+    auto config = mavsdk::Mavsdk::Configuration{mavsdk::ComponentType::GroundStation};
     // Required when connecting to a flight controller directly via USB.
-    mavsdk::Mavsdk::Configuration config{mavsdk::Mavsdk::Configuration::UsageType::GroundStation};
     config.set_always_send_heartbeats(true);
-    mavsdk.set_configuration(config);
+    mavsdk::Mavsdk mavsdk{config};
 
     auto connection_result = mavsdk.add_any_connection(argv[3]);
     if (connection_result != mavsdk::ConnectionResult::Success) {
@@ -44,8 +43,8 @@ int main(int argc, char* argv[])
             &DriverInterface::callback_entry, &driver_interface,
             &driver_interface.gps_pos, &driver_interface.sat_info);
 
-    constexpr auto survey_minimum_m = 5;
-    constexpr auto survey_duration_s = 20;
+    constexpr auto survey_minimum_m = 50;
+    constexpr auto survey_duration_s = 10;
     driver->setSurveyInSpecs(survey_minimum_m * 10000, survey_duration_s);
 
 
@@ -61,7 +60,6 @@ int main(int argc, char* argv[])
     }
 
     printf("configure done!\n");
-
 
     while (true) {
         // Keep running, and don't stop on timeout.
