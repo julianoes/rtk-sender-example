@@ -11,7 +11,7 @@ SerialComms::~SerialComms()
     reset();
 }
 
-bool SerialComms::init(std::string path) 
+bool SerialComms::init(std::string path)
 {
     // open() sometimes hangs on macOS or Linux devices unless you give it O_NONBLOCK.
     fd_ = open(path.c_str(), O_RDWR | O_NOCTTY | O_NONBLOCK);
@@ -78,7 +78,7 @@ ssize_t SerialComms::read(uint8_t* bytes, unsigned bytes_len)
 {
     ssize_t result = ::read(fd_, bytes, bytes_len);
     if (result >= 0) {
-        printf("read %zi bytes\n", result);
+        //printf("read %zi bytes\n", result);
     } else {
         printf("read failed: %s\n", strerror(errno));
     }
@@ -89,7 +89,7 @@ ssize_t SerialComms::write(const uint8_t* bytes, unsigned bytes_len)
 {
     ssize_t result = ::write(fd_, bytes, bytes_len);
     if (result >= 0) {
-        printf("wrote %zi bytes\n", result);
+        //printf("wrote %zi bytes\n", result);
     } else {
         printf("write failed: %s\n", strerror(errno));
     }

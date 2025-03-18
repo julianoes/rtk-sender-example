@@ -9,11 +9,17 @@
 #include <mavsdk/plugins/rtk/rtk.h>
 #include <mavsdk/plugins/telemetry/telemetry.h>
 
+#include <fcntl.h>
+#include <sys/stat.h>
+#include <sys/types.h>
+#include <unistd.h>
+
 class DriverInterface {
 public:
     DriverInterface(SerialComms& serial_comms, mavsdk::Mavsdk& mavsdk) :
         serial_comms_(serial_comms),
-        mavsdk_(mavsdk) {}
+        mavsdk_(mavsdk) {
+    }
 
     static int callback_entry(GPSCallbackType type, void* data1, int data2, void* user);
 
@@ -26,6 +32,7 @@ public:
 
 private:
     SerialComms& serial_comms_;
+
     mavsdk::Mavsdk& mavsdk_;
     std::shared_ptr<mavsdk::Rtk> rtk_plugin_{};
     std::shared_ptr<mavsdk::Telemetry> telemetry_plugin_{};

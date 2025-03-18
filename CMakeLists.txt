@@ -5,7 +5,7 @@ project(rtk-sender-example CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(MAVSDK REQUIRED)
+find_package(MAVSDK 3.0.0 REQUIRED)
 
 add_executable(rtk-sender-example
     rtk-sender-example.cpp
