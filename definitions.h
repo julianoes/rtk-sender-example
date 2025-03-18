@@ -30,10 +30,10 @@ struct sensor_gps_s {
 	uint64_t timestamp;
 	uint64_t time_utc_usec;
 	uint32_t device_id;
-	int32_t lat;
-	int32_t lon;
-	int32_t alt;
-	int32_t alt_ellipsoid;
+	int32_t latitude_deg;
+	int32_t longitude_deg;
+	int32_t altitude_msl_m;
+	int32_t altitude_ellipsoid_m;
 	float s_variance_m_s;
 	float c_variance_rad;
 	float eph;
@@ -57,6 +57,9 @@ struct sensor_gps_s {
 	bool vel_ned_valid;
 	uint8_t satellites_used;
 	uint8_t _padding0[2]; // required for logger
+	uint8_t spoofing_state;
+	bool rtcm_crc_failed;
+	bool rtcm_msg_used;
 };
 
 struct satellite_info_s {
